@@ -74,14 +74,10 @@ class LoginController extends Controller
 
     public function getUser(Request $request)
     {
-//        return 'Se metio al Controller';
-//        return $request->get('usuario');
-        // Funciona, solo manda el token en el body
+        // Funciona, solo manda el token en el body, header o en la url directamente
+        $user= $request->get('usuario');
         try {
-            $user = auth('patient')->userOrFail();
-//            return 'Exito';
-//            return response()->json($this->lolo, 201);;
-            return response()->json('Energia cosmica', 201);;
+            return response()->json($user, 201);;
         }catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e){
             return response()->json(['error' => $e->getMessage()]);
         }
@@ -91,7 +87,12 @@ class LoginController extends Controller
 //
 //        $token = JWTAuth::fromUser($user);
 //        return $token;
+    }
 
-
+    public function getPayload(Request $request)
+    {
+//        return response()->json('Batman who laughts', 201);
+        $payload = auth('patient')->payload();
+        return $payload;
     }
 }

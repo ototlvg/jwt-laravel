@@ -1931,6 +1931,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1971,6 +1975,18 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         // handle error
         console.log(error);
+      }).then(function () {// always executed
+      });
+    },
+    getPayload: function getPayload() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/getpayload').then(function (response) {
+        // handle success
+        console.log(response);
+      })["catch"](function (error) {
+        // handle error
+        console.log('HOla'); // console.dir(error);
+
+        console.dir(error.response);
       }).then(function () {// always executed
       });
     }
@@ -3142,6 +3158,10 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "get-user-container" }, [
         _c("button", { on: { click: _vm.getUser } }, [_vm._v("Get User")])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "get-payload-container" }, [
+        _c("button", { on: { click: _vm.getPayload } }, [_vm._v("Get Payload")])
       ])
     ])
   ])

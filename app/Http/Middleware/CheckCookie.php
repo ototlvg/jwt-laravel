@@ -15,10 +15,11 @@ class CheckCookie
      */
     public function handle($request, Closure $next)
     {
+//        return $next($request);
 //        return response()->json('Energia', 201);
         $value = $request->cookie('jwt');
         if(empty($value)){
-            return response()->json('Vacio', 201);
+            return response()->json('No se mando el Cookie JWT', 201);
         }
 //        return response()->json($value, 201);
         $request->headers->set('Authorization', 'Bearer '.$value);

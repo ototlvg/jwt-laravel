@@ -14,6 +14,10 @@
                 <button @click="getUser">Get User</button>
             </div>
 
+            <div class="get-payload-container">
+                <button @click="getPayload">Get Payload</button>
+            </div>
+
         </div>
 
     </div>
@@ -70,6 +74,22 @@
                     .catch(function (error) {
                         // handle error
                         console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+            },
+            getPayload(){
+                axios.get('/api/getpayload')
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log('HOla')
+                        // console.dir(error);
+                        console.dir(error.response);
                     })
                     .then(function () {
                         // always executed
