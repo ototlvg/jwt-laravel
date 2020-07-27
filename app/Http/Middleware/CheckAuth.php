@@ -19,7 +19,8 @@ class CheckAuth
      */
     public function handle($request, Closure $next)
     {
-        // Version que lanza los errores correctos, pero toma solamente el id del token y busca en la tabla especificada por el registro que coincida con el id, sin importarle si el token se genero a partir de esa tabla o no - NEcesita esto use Tymon\JWTAuth\Facades\JWTAuth;
+        // Version que lanza los errores correctos, pero toma solamente el id del token y busca en la tabla especificada por el registro que coincida con el id, sin importarle si el token se genero a partir de esa tabla o no
+        // - Necesita esto 'use Tymon\JWTAuth\Facades\JWTAuth';
 //        auth()->setDefaultDriver('admin');
 //        $user = JWTAuth::parseToken()->authenticate();
 //        return response()->json($user,201);
