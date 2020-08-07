@@ -1935,6 +1935,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1964,7 +1968,6 @@ __webpack_require__.r(__webpack_exports__);
         // console.log(expDate)
         // console.log(expDate.toUTCString())
         var expDate = este.getExpDate(response.data);
-        console.log(expDate);
         document.cookie = "jwt=".concat(response.data, "; expires=").concat(expDate, "; path=/");
       })["catch"](function (error) {
         console.log(error);
@@ -2016,12 +2019,17 @@ __webpack_require__.r(__webpack_exports__);
       var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
-      var parsed = JSON.parse(jsonPayload);
-      var secToExpire = parsed.exp - parsed.iat;
+      var payloadBody = JSON.parse(jsonPayload);
+      var secToExpire = payloadBody.exp - payloadBody.iat;
       var msToExpire = secToExpire * 1000;
       var actualDate = new Date();
       var expDate = new Date(actualDate.getTime() + msToExpire);
       return expDate.toUTCString();
+    },
+    logout: function logout() {
+      var date = new Date();
+      console.log(date.toUTCString());
+      document.cookie = "jwt= ; expires=".concat(date.toUTCString(), "; path=/");
     }
   }
 });
@@ -3195,6 +3203,10 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "get-payload-container" }, [
         _c("button", { on: { click: _vm.getPayload } }, [_vm._v("Get Payload")])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "get-payload-container" }, [
+        _c("button", { on: { click: _vm.logout } }, [_vm._v("Logout")])
       ])
     ])
   ])

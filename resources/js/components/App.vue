@@ -18,6 +18,10 @@
                 <button @click="getPayload">Get Payload</button>
             </div>
 
+            <div class="get-payload-container">
+                <button @click="logout">Logout</button>
+            </div>
+
         </div>
 
     </div>
@@ -60,7 +64,6 @@
                         // console.log(expDate.toUTCString())
 
                         let expDate = este.getExpDate(response.data)
-                        console.log(expDate)
                         document.cookie = `jwt=${response.data}; expires=${expDate}; path=/`;
                     })
                     .catch(function (error) {
@@ -126,14 +129,20 @@
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
 
-                let parsed =  JSON.parse(jsonPayload);
+                let payloadBody =  JSON.parse(jsonPayload);
 
-                let secToExpire = parsed.exp - parsed.iat
+                let secToExpire = payloadBody.exp - payloadBody.iat
                 let msToExpire = secToExpire*1000
                 let actualDate = new Date
                 let expDate = new Date(actualDate.getTime() + msToExpire)
 
                 return expDate.toUTCString()
+            },
+
+            logout(){
+                let date = new Date()
+                console.log(date.toUTCString())
+                document.cookie = `jwt= ; expires=${date.toUTCString()}; path=/`;
             }
 
         }
