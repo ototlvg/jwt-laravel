@@ -1948,13 +1948,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getToken: function getToken() {
-      var codigo = this.codigo; // console.log(codigo)
+      var codigo = this.codigo;
+      var este = this; // console.log(codigo)
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/login', {
         code: codigo
       }).then(function (response) {
-        console.log(response);
-        document.cookie = "jwt=".concat(response.data);
+        // console.log(response.data);
+        // console.log(este.parseJwt(response.data))
+        // let jwtDecode = este.parseJwt(response.data)
+        // let secToExpire = jwtDecode.exp - jwtDecode.iat
+        // let msToExpire = secToExpire*1000
+        // let actualDate = new Date
+        // let expDate = new Date(actualDate.getTime() + msToExpire)
+        // console.log(expDate)
+        // console.log(expDate.toUTCString())
+        var expDate = este.getExpDate(response.data);
+        console.log(expDate);
+        document.cookie = "jwt=".concat(response.data, "; expires=").concat(expDate, "; path=/");
       })["catch"](function (error) {
         console.log(error);
       });
@@ -1989,6 +2000,28 @@ __webpack_require__.r(__webpack_exports__);
         console.dir(error.response);
       }).then(function () {// always executed
       });
+    },
+    parseJwt: function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    },
+    getExpDate: function getExpDate(token) {
+      // Expiration
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      var parsed = JSON.parse(jsonPayload);
+      var secToExpire = parsed.exp - parsed.iat;
+      var msToExpire = secToExpire * 1000;
+      var actualDate = new Date();
+      var expDate = new Date(actualDate.getTime() + msToExpire);
+      return expDate.toUTCString();
     }
   }
 });

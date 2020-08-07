@@ -42,13 +42,26 @@
         methods: {
             getToken(){
                 let codigo= this.codigo
+                let este = this
                 // console.log(codigo)
                 axios.post('/api/login', {
                     code: codigo
                 })
                     .then(function (response) {
-                        console.log(response);
-                        document.cookie = `jwt=${response.data}`;
+                        // console.log(response.data);
+                        // console.log(este.parseJwt(response.data))
+
+                        // let jwtDecode = este.parseJwt(response.data)
+                        // let secToExpire = jwtDecode.exp - jwtDecode.iat
+                        // let msToExpire = secToExpire*1000
+                        // let actualDate = new Date
+                        // let expDate = new Date(actualDate.getTime() + msToExpire)
+                        // console.log(expDate)
+                        // console.log(expDate.toUTCString())
+
+                        let expDate = este.getExpDate(response.data)
+                        console.log(expDate)
+                        document.cookie = `jwt=${response.data}; expires=${expDate}; path=/`;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -94,6 +107,33 @@
                     .then(function () {
                         // always executed
                     });
+            },
+
+            parseJwt (token){
+                var base64Url = token.split('.')[1];
+                var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            },
+
+            getExpDate(token){ // Expiration
+                let base64Url = token.split('.')[1];
+                let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                let parsed =  JSON.parse(jsonPayload);
+
+                let secToExpire = parsed.exp - parsed.iat
+                let msToExpire = secToExpire*1000
+                let actualDate = new Date
+                let expDate = new Date(actualDate.getTime() + msToExpire)
+
+                return expDate.toUTCString()
             }
 
         }
